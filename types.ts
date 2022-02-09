@@ -10,6 +10,13 @@ export type ProductType = {
 	price: number;
 };
 
+export type CartType = {
+	quantity: number;
+	productPrice: number;
+	productTitle: string;
+	sum: number;
+};
+
 export type NavProps = {
 	navigation?: any;
 	route?: any;
@@ -18,11 +25,19 @@ export type NavProps = {
 export type ProductState = {
 	availableProducts: ProductType[];
 	userProducts: ProductType[];
+	currentProduct: ProductType | null;
+};
+
+export type CartState = {
+	items: {
+		[key: string]: CartType;
+	};
+	totalAmount: number;
 };
 
 export type ActionType = {
 	type: string;
-	payload: any;
+	payload?: any;
 };
 
 export type RootState = ReturnType<typeof rootReducer>;

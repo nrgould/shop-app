@@ -9,39 +9,49 @@ import {
 import React from 'react';
 import { ProductType } from '../types';
 import Colors from '../constants/Colors';
+import { useAppDispatch } from '../Hooks/reduxHooks';
+import { setCurrentProduct } from '../store/actions/products';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface Props {
 	data: ProductType;
 	navigation: any;
 }
 
-export default function ProductItem({
-	data: { id, ownerId, title, imageUrl, description, price },
-	navigation,
-}: Props) {
+export default function ProductItem({ data, navigation }: Props) {
+	const { title, imageUrl, description, price } = data;
+
+	function handleNavigateToDetails() {
+		dispatch(setCurrentProduct(data));
+		navigation.navigate('ProductDetails');
+	}
+
+	const dispatch = useAppDispatch();
 	return (
-		<View style={styles.container}>
-			<Image style={styles.image} source={{ uri: imageUrl }} />
-			<View style={styles.detailsContainer}>
-				<Text style={styles.title}>{title}</Text>
-				<Text style={styles.price}>{price.toFixed(2)}</Text>
-				<Text style={styles.description} numberOfLines={2}>
-					{description}
-				</Text>
+		<TouchableOpacity onPress={handleNavigateToDetails}>
+			<View style={styles.container}>
+				<Image style={styles.image} source={{ uri: imageUrl }} />
+				<View style={styles.detailsContainer}>
+					<Text style={styles.title}>{title}</Text>
+					<Text style={styles.price}>${price.toFixed(2)}</Text>
+					<Text style={styles.description} numberOfLines={2}>
+						{description}
+					</Text>
+				</View>
+				<View style={styles.buttonGroup}>
+					<Button
+						color={Colors.primary}
+						title='View Details'
+						onPress={handleNavigateToDetails}
+					/>
+					<Button
+						color={Colors.primary}
+						title='Add To Cart'
+						onPress={() => console.log('Go to card')}
+					/>
+				</View>
 			</View>
-			<View style={styles.buttonGroup}>
-				<Button
-					color={Colors.primary}
-					title='View Details'
-					onPress={() => navigation.navigate('ProductDetails')}
-				/>
-				<Button
-					color={Colors.primary}
-					title='Go To Cart'
-					onPress={() => console.log('Go to card')}
-				/>
-			</View>
-		</View>
+		</TouchableOpacity>
 	);
 }
 
